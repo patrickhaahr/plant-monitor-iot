@@ -10,11 +10,15 @@ export default function Home() {
     data: plantData,
     isLoading,
     isError,
-    refetch
-  } = useQuery<PlantData>({
-    queryKey: ['currentPlantData'],
+    error,
+    refetch,
+    isFetching
+  } = useQuery({
+    queryKey: ['sensorData', 'current'],
     queryFn: plantApi.getCurrentData,
     refetchInterval: 5 * 60 * 1000, // Refetch every 5 minutes
+    staleTime: 1 * 60 * 1000, // Consider data stale after 1 minute
+    retry: 3,
   });
 
   const getMoistureStatus = (moisture: number) => {
@@ -35,7 +39,9 @@ export default function Home() {
         {isLoading ? (
           <Text className="text-gray-400 text-lg">Loading...</Text>
         ) : isError ? (
-          <Text className="text-red-500 text-lg">Error loading plant data</Text>
+          <Text className="text-red-500 text-lg">
+            Error: {error instanceof Error ? error.message : 'Failed to load plant data'}
+          </Text>
         ) : plantData ? (
           <>
             <View className="space-y-4">
@@ -60,14 +66,17 @@ export default function Home() {
             <TouchableOpacity 
               className="mt-6 bg-zinc-800 p-4 rounded-lg active:bg-zinc-700"
               onPress={() => refetch()}
+              disabled={isFetching}
             >
-              <Text className="text-white text-center">Refresh Data</Text>
+              <Text className="text-white text-center">
+                {isFetching ? 'Refreshing...' : 'Refresh Data'}
+              </Text>
             </TouchableOpacity>
           </>
         ) : null}
       </View>
 
-      <Link href="/profile" className="mt-6 text-gray-400 text-center block">
+      <Link href="/details" className="mt-6 text-gray-400 text-center block">
         View Plant Details
       </Link>
     </View>

@@ -13,6 +13,9 @@ const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60, // 1 minute
+      retry: 3,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      networkMode: 'online',
     },
   },
 });
@@ -56,7 +59,7 @@ export default function RootLayout() {
             }}
           />
           <Stack.Screen
-            name="profile"
+            name="details"
             options={{
               title: 'Plant Details'
             }}

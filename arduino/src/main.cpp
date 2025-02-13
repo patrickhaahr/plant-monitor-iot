@@ -2,9 +2,6 @@
 #include <HTTPClient.h>
 #include "config.h" 
 
-// Your server endpoint that accepts POST requests
-const char* serverUrl = "http://192.168.1.14:5244/api/SensorData";
-
 // Define the analog pin where the soil moisture sensor is connected
 const int moistureSensorPin = 32;  
 

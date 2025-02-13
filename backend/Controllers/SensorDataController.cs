@@ -25,7 +25,7 @@ namespace backend.Controllers
                 return BadRequest("Sensor data is null.");
             }
 
-            sensorData.Timestamp = DateTime.UtcNow;
+            sensorData.Timestamp = DateTime.Now;
 
             _context.SensorData.Add(sensorData);
             await _context.SaveChangesAsync();

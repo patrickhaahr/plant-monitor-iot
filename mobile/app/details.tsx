@@ -5,14 +5,18 @@ import { useQuery } from '@tanstack/react-query';
 import { plantApi, PlantData } from '../services/api';
 import '../global.css';
 
-export default function Profile() {
+export default function Details() {
   const { 
     data: history,
     isLoading,
-    isError
-  } = useQuery<PlantData[]>({
-    queryKey: ['plantHistory'],
+    isError,
+    error,
+    isFetching
+  } = useQuery({
+    queryKey: ['sensorData', 'history'],
     queryFn: plantApi.getHistory,
+    staleTime: 1 * 60 * 1000, // Consider data stale after 1 minute
+    retry: 3,
   });
 
   const getMoistureStatus = (moisture: number) => {
@@ -38,12 +42,17 @@ export default function Profile() {
         </View>
 
         <View className="bg-zinc-900 rounded-xl p-6">
-          <Text className="text-white text-2xl font-bold mb-4">Moisture History</Text>
+          <Text className="text-white text-2xl font-bold mb-4">
+            Moisture History
+            {isFetching && ' (Refreshing...)'}
+          </Text>
           
           {isLoading ? (
             <Text className="text-gray-400 text-lg">Loading history...</Text>
           ) : isError ? (
-            <Text className="text-red-500 text-lg">Error loading history</Text>
+            <Text className="text-red-500 text-lg">
+              Error: {error instanceof Error ? error.message : 'Failed to load history'}
+            </Text>
           ) : history && history.length > 0 ? (
             <View className="space-y-4">
               {history.map((reading) => (

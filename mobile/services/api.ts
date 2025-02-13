@@ -1,22 +1,26 @@
-import mockData from './get_sensor_data.json';
-
 export interface PlantData {
   id: number;
   moisture: number;
   timestamp: string;
 }
 
-// Simulate API delay
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export const plantApi = {
   getCurrentData: async (): Promise<PlantData> => {
-    await delay(500); // Simulate network delay
-    return mockData[mockData.length - 1]; // Return the latest reading
+    const response = await fetch(`${API_URL}/SensorData`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data: PlantData[] = await response.json();
+    return data[data.length - 1]; // Return the latest reading
   },
 
   getHistory: async (): Promise<PlantData[]> => {
-    await delay(500); // Simulate network delay
-    return mockData;
+    const response = await fetch(`${API_URL}/SensorData`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
   }
 }; 
