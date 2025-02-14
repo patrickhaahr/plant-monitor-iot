@@ -49,7 +49,10 @@ export default function RootLayout() {
             },
             contentStyle: {
               backgroundColor: '#000',
-            }
+            },
+            animation: 'none',
+            presentation: 'transparentModal',
+            animationDuration: 0
           }}
         >
           <Stack.Screen

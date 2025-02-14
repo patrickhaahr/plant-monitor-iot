@@ -1,11 +1,54 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { plantApi, PlantData } from '../services/api';
+import * as Notifications from 'expo-notifications';
 import '../global.css';
 
+// Configure notifications
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
+async function requestNotificationPermission() {
+  const { status } = await Notifications.requestPermissionsAsync();
+  return status === 'granted';
+}
+
+async function scheduleNotification(title: string, body: string) {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title,
+      body,
+    },
+    trigger: null, // null means show immediately
+  });
+}
+
 export default function Home() {
+  useEffect(() => {
+    requestNotificationPermission();
+  }, []);
+
+  const checkMoistureAndNotify = (data: PlantData) => {
+    if (data.moisture > 3000) {
+      scheduleNotification(
+        '🪴 Plant Needs Water!',
+        'Your plant is very dry and needs water soon.'
+      );
+    } else if (data.moisture > 2200) {
+      scheduleNotification(
+        '🌱 Plant Check Needed',
+        'Your plant is getting dry, consider watering it.'
+      );
+    }
+  };
+
   const { 
     data: plantData,
     isLoading,
@@ -21,14 +64,30 @@ export default function Home() {
     retry: 3,
   });
 
+  // Check moisture levels whenever we get new data
+  useEffect(() => {
+    if (plantData) {
+      checkMoistureAndNotify(plantData);
+    }
+  }, [plantData]);
+
   const getMoistureStatus = (moisture: number) => {
-    if (moisture < 500) return { text: 'Low - Water Needed!', color: 'text-red-500' };
-    if (moisture < 800) return { text: 'Medium', color: 'text-yellow-500' };
-    return { text: 'Good', color: 'text-green-500' };
+    if (moisture > 3000) return { text: 'Very Dry - Water Needed!', color: 'text-red-500' };
+    if (moisture > 2200) return { text: 'Dry - Consider Watering', color: 'text-yellow-500' };
+    if (moisture > 1800) return { text: 'Slightly Dry', color: 'text-yellow-300' };
+    if (moisture > 1400) return { text: 'Good Moisture', color: 'text-green-500' };
+    return { text: 'Very Wet', color: 'text-blue-500' };
   };
 
   const formatDate = (timestamp: string) => {
-    return new Date(timestamp).toLocaleString();
+    const date = new Date(timestamp);
+    return date.toLocaleString(undefined, { 
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   return (
@@ -72,13 +131,19 @@ export default function Home() {
                 {isFetching ? 'Refreshing...' : 'Refresh Data'}
               </Text>
             </TouchableOpacity>
+
+            <Link href="/details" asChild>
+              <TouchableOpacity 
+                className="mt-4 bg-zinc-800 p-4 rounded-lg active:bg-zinc-700"
+              >
+                <Text className="text-white text-center">
+                  View Plant Details
+                </Text>
+              </TouchableOpacity>
+            </Link>
           </>
         ) : null}
       </View>
-
-      <Link href="/details" className="mt-6 text-gray-400 text-center block">
-        View Plant Details
-      </Link>
     </View>
   );
 } 

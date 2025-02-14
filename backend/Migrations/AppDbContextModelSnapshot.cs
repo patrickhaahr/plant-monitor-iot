@@ -27,7 +27,7 @@ namespace backend.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("datetime2(0)");
 
                     b.HasKey("Id");
 

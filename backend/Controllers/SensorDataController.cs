@@ -25,7 +25,8 @@ namespace backend.Controllers
                 return BadRequest("Sensor data is null.");
             }
 
-            sensorData.Timestamp = DateTime.Now;
+            // Set timestamp to current time, truncating milliseconds
+            sensorData.Timestamp = DateTime.Now.AddTicks(-(DateTime.Now.Ticks % TimeSpan.TicksPerSecond));
 
             _context.SensorData.Add(sensorData);
             await _context.SaveChangesAsync();
