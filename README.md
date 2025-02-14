@@ -2,6 +2,15 @@
 
 A full-stack IoT solution for monitoring plant soil moisture using Arduino, .NET Core backend, and React Native mobile app.
 
+<div align="center">
+  <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+    <img src="https://github.com/user-attachments/assets/2fed39ab-5e53-46ec-956e-6e8213e3c651" width="325" alt="Home Screen" />
+    <img src="https://github.com/user-attachments/assets/7290776d-7c07-4826-996d-9b3d9d28d7ec" width="325" alt="Plant Dry Screen" />
+    <img src="https://github.com/user-attachments/assets/0d0274d8-2b3f-4805-a68b-d8e7a3238e07" width="325" alt="Plant Details" />
+    <img src="https://github.com/user-attachments/assets/ee73bcd8-a8de-4e02-9da8-67f08763d1e7" width="400" alt="Notification" />
+  </div>
+</div>
+
 ## Features
 
 - Real-time soil moisture monitoring
