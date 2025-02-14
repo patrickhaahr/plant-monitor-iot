@@ -1,10 +1,42 @@
 # PlatformIO
 .pio
 .vscode
-config.h
+arduino/src/config.h
 
-# dependencies
+# Dependencies
 node_modules/
+.expo/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# IDE
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# macOS
+.DS_Store
+
+# Temporary files
+*.log
+*.sqlite
+*.sqlite3
+
+# Build outputs
+bin/
+obj/
+build/
+.pio/
 
 # Expo
 .expo/

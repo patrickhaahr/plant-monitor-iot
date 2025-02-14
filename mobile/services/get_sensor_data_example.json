@@ -1,0 +1,152 @@
+[
+  {
+    "id": 1,
+    "moisture": 4095,
+    "timestamp": "2025-02-14T00:49"
+  },
+  {
+    "id": 2,
+    "moisture": 1382,
+    "timestamp": "2025-02-14T00:50"
+  },
+  {
+    "id": 3,
+    "moisture": 4095,
+    "timestamp": "2025-02-14T00:51"
+  },
+  {
+    "id": 4,
+    "moisture": 4095,
+    "timestamp": "2025-02-14T00:52"
+  },
+  {
+    "id": 5,
+    "moisture": 4095,
+    "timestamp": "2025-02-14T00:53"
+  },
+  {
+    "id": 6,
+    "moisture": 1505,
+    "timestamp": "2025-02-14T00:54"
+  },
+  {
+    "id": 7,
+    "moisture": 1517,
+    "timestamp": "2025-02-14T00:55"
+  },
+  {
+    "id": 8,
+    "moisture": 1530,
+    "timestamp": "2025-02-14T00:56"
+  },
+  {
+    "id": 9,
+    "moisture": 1531,
+    "timestamp": "2025-02-14T00:56"
+  },
+  {
+    "id": 10,
+    "moisture": 1510,
+    "timestamp": "2025-02-14T00:56"
+  },
+  {
+    "id": 11,
+    "moisture": 1526,
+    "timestamp": "2025-02-14T00:56"
+  },
+  {
+    "id": 12,
+    "moisture": 1520,
+    "timestamp": "2025-02-14T00:56"
+  },
+  {
+    "id": 13,
+    "moisture": 1535,
+    "timestamp": "2025-02-14T00:56"
+  },
+  {
+    "id": 14,
+    "moisture": 1523,
+    "timestamp": "2025-02-14T00:56"
+  },
+  {
+    "id": 15,
+    "moisture": 1535,
+    "timestamp": "2025-02-14T00:56"
+  },
+  {
+    "id": 16,
+    "moisture": 1462,
+    "timestamp": "2025-02-14T00:56"
+  },
+  {
+    "id": 17,
+    "moisture": 1557,
+    "timestamp": "2025-02-14T00:56"
+  },
+  {
+    "id": 18,
+    "moisture": 1492,
+    "timestamp": "2025-02-14T00:57"
+  },
+  {
+    "id": 19,
+    "moisture": 4095,
+    "timestamp": "2025-02-14T00:57"
+  },
+  {
+    "id": 20,
+    "moisture": 4095,
+    "timestamp": "2025-02-14T00:57"
+  },
+  {
+    "id": 21,
+    "moisture": 1095,
+    "timestamp": "2025-02-14T00:57"
+  },
+  {
+    "id": 22,
+    "moisture": 1195,
+    "timestamp": "2025-02-14T00:57"
+  },
+  {
+    "id": 23,
+    "moisture": 895,
+    "timestamp": "2025-02-14T00:57"
+  },
+  {
+    "id": 24,
+    "moisture": 1295,
+    "timestamp": "2025-02-14T00:57"
+  },
+  {
+    "id": 25,
+    "moisture": 1395,
+    "timestamp": "2025-02-14T00:57"
+  },
+  {
+    "id": 26,
+    "moisture": 1495,
+    "timestamp": "2025-02-14T00:57"
+  },
+  {
+    "id": 27,
+    "moisture": 1595,
+    "timestamp": "2025-02-14T00:57"
+  },
+  {
+    "id": 28,
+    "moisture": 1695,
+    "timestamp": "2025-02-14T00:58"
+  },
+  {
+    "id": 29,
+    "moisture": 1795,
+    "timestamp": "2025-02-14T00:58"
+  },
+  {
+    "id": 30,
+    "moisture": 3095,
+    "timestamp": "2025-02-14T00:58"
+  }
+]
