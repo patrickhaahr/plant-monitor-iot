@@ -25,10 +25,35 @@ A full-stack IoT solution for monitoring plant soil moisture using Arduino, .NET
 1. Copy `arduino/src/config.template.h` to `arduino/src/config.h`
 2. Update WiFi credentials and server URL in `config.h`
 3. Upload code to ESP32 board and monitor serial output:
+
+   You can use one of these methods:
+
+   **Using PlatformIO CLI:**
    ```bash
-   pio run -t upload
-   pio device monitor
+   # Install PlatformIO CLI if not already installed
+   pip install platformio
+
+   # Build the project
+   platformio run
+
+   # Upload firmware to ESP32
+   platformio run --target upload
+
+   # Monitor serial output
+   platformio device monitor
    ```
+
+   **Using PlatformIO IDE Extension:**
+   - Open project in VS Code with PlatformIO extension
+   - Click Build button (✓) to compile
+   - Click Upload button (→) to flash ESP32
+   - Click Serial Monitor button to view output
+
+   **Using Arduino IDE:**
+   - Open `arduino/src/main.cpp` in Arduino IDE
+   - Select "ESP32 Dev Module" from Tools > Board menu
+   - Click Upload button to compile and flash
+   - Open Serial Monitor (Tools > Serial Monitor) to view output
 
 
 ### Backend Setup
@@ -37,8 +62,13 @@ A full-stack IoT solution for monitoring plant soil moisture using Arduino, .NET
 2. Navigate to `backend` directory
 3. Run:
    ```bash
+   # Restore NuGet package dependencies
    dotnet restore
+
+   # Apply database migrations to create/update SQLite database
    dotnet ef database update
+
+   # Start the development server
    dotnet run
    ```
 
@@ -50,11 +80,16 @@ A full-stack IoT solution for monitoring plant soil moisture using Arduino, .NET
 4. Navigate to `mobile` directory
 5. Run:
    ```bash
+   # Install project dependencies
    npm install
+
+   # Start the Expo development server
    npx expo start
    ```
 
 ## Environment Variables
+
+> **Note:** For both Arduino and Mobile app, use your computer's IPv4 address instead of localhost (e.g., http://192.168.1.100:5000) since devices need to access the API over the local network.
 
 ### Arduino (`config.h`)
 - `ssid`: WiFi network name
