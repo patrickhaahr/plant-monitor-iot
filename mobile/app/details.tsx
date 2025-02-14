@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { Link } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { plantApi, PlantData } from '../services/api';
@@ -40,12 +40,14 @@ export default function Details() {
     isLoading,
     isError,
     error,
-    isFetching
+    isFetching,
+    refetch
   } = useQuery({
     queryKey: ['sensorData', 'history'],
     queryFn: plantApi.getHistory,
     staleTime: 1 * 60 * 1000, // Consider data stale after 1 minute
     retry: 3,
+    gcTime: 1000 * 60 * 60, // Keep cache for 1 hour
   });
 
   const getMoistureStatus = (moisture: number) => {
@@ -69,8 +71,19 @@ export default function Details() {
 
   return (
     <View className="flex-1 bg-black">
-      <ScrollView className="p-6">
-        {isLoading ? (
+      <ScrollView 
+        className="p-6"
+        refreshControl={
+          <RefreshControl
+            refreshing={isFetching}
+            onRefresh={refetch}
+            tintColor="#9ca3af" // Light gray color for the spinner
+            colors={["#9ca3af"]} // For Android
+            progressBackgroundColor="#18181b" // Dark background for the spinner
+          />
+        }
+      >
+        {isLoading && !history ? (
           <LoadingSkeleton />
         ) : isError ? (
           <>
@@ -105,7 +118,7 @@ export default function Details() {
               {history && history.length > 0 ? (
                 <View className="space-y-4">
                   {[...history]
-                    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+                    .sort((a, b) => b.id - a.id)
                     .map((reading) => (
                     <View key={reading.id} className="border-b border-zinc-800 pb-4">
                       <View className="flex-row justify-between items-center">

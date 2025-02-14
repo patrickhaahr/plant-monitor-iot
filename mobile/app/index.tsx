@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import { Link } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { plantApi, PlantData } from '../services/api';
@@ -62,6 +62,8 @@ export default function Home() {
     refetchInterval: 5 * 60 * 1000, // Refetch every 5 minutes
     staleTime: 1 * 60 * 1000, // Consider data stale after 1 minute
     retry: 3,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
+    gcTime: 1000 * 60 * 60, // Keep cache for 1 hour
   });
 
   // Check moisture levels whenever we get new data
@@ -91,59 +93,77 @@ export default function Home() {
   };
 
   return (
-    <View className="flex-1 bg-black p-6">
-      <View className="bg-zinc-900 rounded-xl p-6 shadow-lg">
-        <Text className="text-white text-2xl font-bold mb-6">Plant Status</Text>
-        
-        {isLoading ? (
-          <Text className="text-gray-400 text-lg">Loading...</Text>
-        ) : isError ? (
-          <Text className="text-red-500 text-lg">
-            Error: {error instanceof Error ? error.message : 'Failed to load plant data'}
-          </Text>
-        ) : plantData ? (
-          <>
-            <View className="space-y-4">
-              <View>
-                <Text className="text-gray-400 text-base">Moisture Level</Text>
-                <Text className={`text-3xl font-bold ${getMoistureStatus(plantData.moisture).color}`}>
-                  {plantData.moisture}
-                </Text>
-                <Text className={`text-lg ${getMoistureStatus(plantData.moisture).color}`}>
-                  {getMoistureStatus(plantData.moisture).text}
-                </Text>
+    <ScrollView 
+      className="flex-1 bg-black"
+      refreshControl={
+        <RefreshControl
+          refreshing={isFetching}
+          onRefresh={refetch}
+          tintColor="#9ca3af"
+          colors={["#9ca3af"]}
+          progressBackgroundColor="#18181b"
+        />
+      }
+    >
+      <View className="p-6">
+        <View className="bg-zinc-900 rounded-xl p-6 shadow-lg">
+          <Text className="text-white text-2xl font-bold mb-6">Plant Status</Text>
+          
+          {isLoading && !plantData ? (
+            <Text className="text-gray-400 text-lg">Loading...</Text>
+          ) : plantData ? (
+            <>
+              <View className="space-y-4">
+                <View>
+                  <Text className="text-gray-400 text-base">Moisture Level</Text>
+                  <Text className={`text-3xl font-bold ${getMoistureStatus(plantData.moisture).color}`}>
+                    {plantData.moisture}
+                  </Text>
+                  <Text className={`text-lg ${getMoistureStatus(plantData.moisture).color}`}>
+                    {getMoistureStatus(plantData.moisture).text}
+                  </Text>
+                  {isError && (
+                    <Text className="text-yellow-500 text-sm mt-1">
+                      Unable to fetch new data. Showing last known values.
+                    </Text>
+                  )}
+                </View>
+
+                <View>
+                  <Text className="text-gray-400 text-base">Last Updated</Text>
+                  <Text className="text-white text-lg">
+                    {formatDate(plantData.timestamp)}
+                  </Text>
+                </View>
               </View>
 
-              <View>
-                <Text className="text-gray-400 text-base">Last Updated</Text>
-                <Text className="text-white text-lg">
-                  {formatDate(plantData.timestamp)}
-                </Text>
-              </View>
-            </View>
-
-            <TouchableOpacity 
-              className="mt-6 bg-zinc-800 p-4 rounded-lg active:bg-zinc-700"
-              onPress={() => refetch()}
-              disabled={isFetching}
-            >
-              <Text className="text-white text-center">
-                {isFetching ? 'Refreshing...' : 'Refresh Data'}
-              </Text>
-            </TouchableOpacity>
-
-            <Link href="/details" asChild>
               <TouchableOpacity 
-                className="mt-4 bg-zinc-800 p-4 rounded-lg active:bg-zinc-700"
+                className="mt-6 bg-zinc-800 p-4 rounded-lg active:bg-zinc-700"
+                onPress={() => refetch()}
+                disabled={isFetching}
               >
                 <Text className="text-white text-center">
-                  View Plant Details
+                  {isFetching ? 'Refreshing...' : 'Refresh Data'}
                 </Text>
               </TouchableOpacity>
-            </Link>
-          </>
-        ) : null}
+
+              <Link href="/details" asChild>
+                <TouchableOpacity 
+                  className="mt-4 bg-zinc-800 p-4 rounded-lg active:bg-zinc-700"
+                >
+                  <Text className="text-white text-center">
+                    View Plant Details
+                  </Text>
+                </TouchableOpacity>
+              </Link>
+            </>
+          ) : (
+            <Text className="text-red-500 text-lg">
+              Error: No data available
+            </Text>
+          )}
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 } 
